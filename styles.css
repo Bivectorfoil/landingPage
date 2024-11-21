@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    background: linear-gradient(125deg, #635BFF -10%, #3A3375 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 添加流动光效 */
+body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
+    animation: flow 15s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes flow {
+    0% {
+        transform: translate(-10%, -10%) rotate(0deg);
+    }
+    100% {
+        transform: translate(10%, 10%) rotate(360deg);
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.content {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    padding: 3rem;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.2),
+        0 0 100px rgba(99, 91, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 内容区域光效 */
+.content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(99, 91, 255, 0.1) 0%, transparent 50%);
+    animation: contentGlow 10s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes contentGlow {
+    0% {
+        transform: translate(-5%, -5%);
+    }
+    100% {
+        transform: translate(5%, 5%);
+    }
+}
+
+.code-block {
+    text-align: left;
+    margin-bottom: 2rem;
+    padding: 1.8rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.code-line {
+    display: block;
+    line-height: 1.6;
+    font-size: 1.1rem;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.keyword {
+    color: #C4B5FD;
+}
+
+.string {
+    color: #A5F3FC;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.social-links a {
+    color: #fff;
+    font-size: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+}
+
+.social-links a:hover {
+    color: #fff;
+    transform: translateY(-3px);
+    background: rgba(99, 91, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(99, 91, 255, 0.4);
+}
+
+/* 添加打字机光标效果 */
+.code-block .code-line:last-child::after {
+    content: '|';
+    animation: cursor 1s infinite;
+    color: #C4B5FD;
+}
+
+@keyframes cursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 移动端响应式设计 */
+@media (max-width: 768px) {
+    .content {
+        padding: 1.5rem;
+    }
+    
+    .code-block {
+        padding: 1.2rem;
+    }
+
+    .code-line {
+        font-size: 1rem;
+    }
+}
