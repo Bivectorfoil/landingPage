@@ -120,9 +120,30 @@ chmod 644 "$SITE_ROOT"/*
 # 配置 Nginx
 echo -e "\n${YELLOW}[7/9] 配置 Nginx...${NC}"
 # 替换配置文件中的域名占位符和用户
+NGINX_AVAILABLE="/etc/nginx/sites-available"
+NGINX_ENABLED="/etc/nginx/sites-enabled"
+NGINX_CONF_NAME="landing-page"
+
+# 确保目录存在
+mkdir -p "$NGINX_AVAILABLE" "$NGINX_ENABLED"
+
+# 创建站点配置
 sed -e "s/DOMAIN_PLACEHOLDER/$domain_name/g" \
     -e "s/www-data/$WEB_USER/g" \
-    nginx.conf > /etc/nginx/nginx.conf
+    nginx.conf > "$NGINX_AVAILABLE/$NGINX_CONF_NAME"
+
+# 检查并删除已存在的软链接
+if [ -L "$NGINX_ENABLED/$NGINX_CONF_NAME" ]; then
+    rm "$NGINX_ENABLED/$NGINX_CONF_NAME"
+fi
+
+# 创建新的软链接
+ln -s "$NGINX_AVAILABLE/$NGINX_CONF_NAME" "$NGINX_ENABLED/$NGINX_CONF_NAME"
+
+# 删除默认配置
+if [ -L "$NGINX_ENABLED/default" ]; then
+    rm "$NGINX_ENABLED/default"
+fi
 
 # 测试 Nginx 配置
 echo -e "\n${YELLOW}[8/9] 测试 Nginx 配置...${NC}"
@@ -156,7 +177,7 @@ systemctl status nginx | grep Active
 echo -e "\n${GREEN}=== 部署信息 ===${NC}"
 echo -e "网站用户: ${WEB_USER}"
 echo -e "网站文件位置: ${SITE_ROOT}"
-echo -e "Nginx 配置文件: /etc/nginx/nginx.conf"
+echo -e "Nginx 配置文件: ${NGINX_AVAILABLE}/${NGINX_CONF_NAME}"
 echo -e "Nginx 日志文件: /var/log/nginx/access.log"
 echo -e "\n${YELLOW}提示: 如需查看访问日志，请运行:${NC}"
 echo -e "tail -f /var/log/nginx/access.log"
